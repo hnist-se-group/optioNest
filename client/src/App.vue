@@ -1,7 +1,8 @@
 <template>
-  <LoginView/>
+  <NavBar />
+  <router-view></router-view>
 </template>
 
 <script setup>
-import LoginView from './views/LoginView.vue';
+import NavBar from './component/NavBar.vue';
 </script>
