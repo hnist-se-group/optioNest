@@ -1,5 +1,11 @@
 <template>
-    <el-container>
+    <el-container v-if="!store.login">
+        <el-main>
+            <LoginView />
+        </el-main>
+    </el-container>
+
+    <el-container v-else>
         <el-header>
             <NavBar />
         </el-header>
@@ -7,7 +13,11 @@
             <el-row justify="center">
                 <el-col :span="16">
                     <el-card>
-                        <router-view></router-view>
+                        <router-view v-slot="{ Component }">
+                            <keep-alive include="HomeView">
+                                <component :is="Component" />
+                            </keep-alive>
+                        </router-view>
                     </el-card>
                 </el-col>
             </el-row>
@@ -16,5 +26,9 @@
 </template>
 
 <script setup>
-import NavBar from './components/NavBar.vue';
+import LoginView from '@/views/LoginView.vue';
+import NavBar from '@/components/NavBar.vue';
+import { useStore } from '@/stores/user';
+
+const store = useStore();
 </script>
