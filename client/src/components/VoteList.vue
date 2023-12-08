@@ -8,19 +8,23 @@
                 {{ vote.content }}
             </el-text>
         </el-card>
+        <el-row justify="center">
+            <el-pagination :page-count="pageCount" v-model:current-page="curPage" layout="prev, pager, next" background />
+        </el-row>
     </el-space>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from '@/utils/axios';
 
 const router = useRouter();
 const props = defineProps(['url']);
 
-let votes = ref([]);
-axios(props.url).then(response => votes.value = response.data);
+const votes = ref([]);
+const pageCount = ref(0);
+const curPage = ref(1);
 
 function to_detail(id) {
     router.push({
@@ -28,5 +32,11 @@ function to_detail(id) {
         params: { id }
     })
 }
+
+watch(curPage, (newValue) => {
+    axios(props.url + '/' + newValue).then(response => votes.value = response.data);
+}, { immediate: true });
+
+await axios('/allPages').then(response => pageCount.value = response.data.allPages);
 
 </script>

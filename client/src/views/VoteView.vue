@@ -1,5 +1,5 @@
 <template>
-    <el-page-header @back="$router.push({ name: 'home' })">
+    <el-page-header @back="goBack">
     </el-page-header>
     <el-space direction="vertical" fill size="large" style="width: 100%; margin-bottom: 10px;">
         <el-row justify="center">
@@ -64,17 +64,14 @@
 <script setup>
 import { ref } from 'vue';
 import axios from "@/utils/axios.js";
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from '../stores/user';
 
 const route = useRoute();
+const router = useRouter();
 const store = useStore();
 
 const vote = ref({});
-axios('/getDetailInfo', { params: { uid: store.uid, id: route.id } }).then(response => {
-    vote.value = response.data;
-    console.log(vote.value.state);
-});
 
 function submit_vote(option) {
     axios('/voting', {
@@ -88,6 +85,16 @@ function submit_vote(option) {
     option.num++;
     vote.value.state = option.oid;
 }
+
+function goBack() {
+    router.back();
+}
+
+axios('/getDetailInfo', { params: { uid: store.uid, id: route.id } }).then(response => {
+    vote.value = response.data;
+    console.log(vote.value.state);
+});
+
 </script>
 
 <style scoped>

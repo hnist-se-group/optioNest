@@ -1,5 +1,5 @@
 <template>
-    <el-form ref="form_ref" :model="user" :rules="rules" size="large" status-icon hide-required-asterisk>
+    <el-form ref="formRef" :model="user" :rules="rules" size="large" status-icon hide-required-asterisk>
         <el-form-item prop="username">
             <el-input :validate-event="false" v-model="user.username" placeholder="username" />
         </el-form-item>
@@ -30,7 +30,7 @@ import { useStore } from "../stores/user";
 const store = useStore();
 
 const user = reactive({});
-const form_ref = ref();
+const formRef = ref();
 const rules = reactive({
     username: [
         { required: true, message: 'Please input username' }
@@ -41,7 +41,7 @@ const rules = reactive({
 });
 
 async function login() {
-    await form_ref.value.validate((valid) => {
+    await formRef.value.validate((valid) => {
         if (valid) {
             axios.post('/login', {
                 username: user.username,
@@ -49,7 +49,8 @@ async function login() {
             }).then((response) => {
                 if (~response.data) {
                     store.login = true;
-                    store.uid = response.data;
+                    store.uid = response.data.uid;
+                    store.headImg = response.data.headImg;
                 } else
                     user.errmsg = 'user does not exist';
             });

@@ -10,17 +10,21 @@
             <NavBar />
         </el-header>
         <el-main>
+
             <el-row justify="center">
                 <el-col :span="16">
                     <el-card>
+                        <Suspense>
                         <router-view v-slot="{ Component }">
                             <keep-alive include="HomeView">
-                                <component :is="Component" />
-                            </keep-alive>
-                        </router-view>
+                                    <component :is="Component" />
+                                </keep-alive>
+                            </router-view>
+                        </Suspense>
                     </el-card>
                 </el-col>
             </el-row>
+            
         </el-main>
     </el-container>
 </template>
