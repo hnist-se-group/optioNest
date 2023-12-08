@@ -90,9 +90,8 @@ function goBack() {
     router.back();
 }
 
-axios('/getDetailInfo', { params: { uid: store.uid, id: route.id } }).then(response => {
+axios('/getDetailInfo', { params: { uid: store.uid, id: Number(route.params.id) } }).then(response => {
     vote.value = response.data;
-    console.log(vote.value.state);
 });
 
 </script>
