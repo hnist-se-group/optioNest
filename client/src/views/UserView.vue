@@ -75,12 +75,10 @@ function ModifyInfo() {
 }
 
 axios('/loadUser/' + store.uid).then(response => {
-  votes.value = info.value.votes;
+  votes.value = response.data.votes;
 
-  delete info.value.votes;
+  delete response.data.votes;
   info.value = response.data;
   infoTmp.value = { ...info.value };
 });
-
-
 </script>

@@ -7,14 +7,8 @@
         <el-menu-item index="/add">创建投票</el-menu-item>
         <el-menu-item index="/user">
             <el-avatar>
-                <img :src="store.headImg">
+                <img src="@/assets/kyaru.jpg">
             </el-avatar>
         </el-menu-item>
     </el-menu>
 </template>
-
-<script setup>
-import { useStore } from '../stores/user';
-
-const store = useStore();
-</script>

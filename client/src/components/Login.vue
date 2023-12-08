@@ -50,7 +50,6 @@ async function login() {
                 if (~response.data) {
                     store.login = true;
                     store.uid = response.data.uid;
-                    store.headImg = response.data.headImg;
                 } else
                     user.errmsg = 'user does not exist';
             });
