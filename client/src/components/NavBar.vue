@@ -3,7 +3,10 @@
         <h3>optioNest</h3>
         <el-menu-item index="/">首页</el-menu-item>
 
-        <el-menu-item index="/user" style="margin-left: auto;">
+
+        <div style="margin-left: auto;"></div>
+        <el-menu-item index="/add">创建投票</el-menu-item>
+        <el-menu-item index="/user">
             <el-avatar>
                 <img src="@/assets/kyaru.jpg">
             </el-avatar>

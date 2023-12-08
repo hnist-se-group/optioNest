@@ -71,7 +71,7 @@ const route = useRoute();
 const store = useStore();
 
 const vote = ref({});
-axios('/getDetailInfo/' + route.params.id).then(response => {
+axios('/getDetailInfo', { params: { uid: store.uid, id: route.id } }).then(response => {
     vote.value = response.data;
     console.log(vote.value.state);
 });
