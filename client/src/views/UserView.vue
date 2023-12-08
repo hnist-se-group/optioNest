@@ -1,12 +1,24 @@
 <template>
-  <el-descriptions title="个人信息">
-    <el-descriptions-item label="Username:">{{ userInfo.name }}</el-descriptions-item>
-    <el-descriptions-item label="Email:">{{ userInfo.email }}</el-descriptions-item>
-    <el-descriptions-item label="Place:">{{ userInfo.location }}</el-descriptions-item>
-    <el-descriptions-item label="Gender:">
-      <el-tag size="small">{{ userInfo.gender }}</el-tag>
+  <el-descriptions title="个人信息" border>
+    <template #extra>
+      <el-button v-if="isModify" @click="ModifyInfo" type="warning">提交修改</el-button>
+      <el-button type="primary" @click="changeModify">修改个人信息</el-button>
+    </template>
+    <el-descriptions-item label="Username:">
+      <InfoInput :is-modify="isModify" v-model="infoTmp.name" />
     </el-descriptions-item>
-    <el-descriptions-item label="个人简介:">{{ userInfo.brief }}</el-descriptions-item>
+    <el-descriptions-item label="Email:">
+      <InfoInput :is-modify="isModify" v-model="infoTmp.email" />
+    </el-descriptions-item>
+    <el-descriptions-item label="Place:">
+      <InfoInput :is-modify="isModify" v-model="infoTmp.location" />
+    </el-descriptions-item>
+    <el-descriptions-item label="Gender:">
+      <InfoInput :is-modify="isModify" v-model="infoTmp.gender" />
+    </el-descriptions-item>
+    <el-descriptions-item label="个人简介:">
+      <InfoInput :is-modify="isModify" v-model="infoTmp.brief" />
+    </el-descriptions-item>
   </el-descriptions>
 
   <el-tabs stretch type="card">
@@ -24,23 +36,19 @@
   </el-tabs>
 </template>
 
-
-
 <script setup>
 import { ref } from 'vue';
 import axios from "@/utils/axios.js";
 import { useRouter } from 'vue-router';
 import { useStore } from '../stores/user';
+import InfoInput from '../components/InfoInput.vue';
 
 const router = useRouter();
 const store = useStore();
 
-const userInfo = ref({});
-let votes = ref([]);
-axios('/loadUser/' + store.uid).then(response => {
-  userInfo.value = response.data;
-  votes.value = userInfo.value.votes;
-});
+const isModify = ref(false);
+const info = ref({}), infoTmp = ref({});
+const votes = ref([]);
 
 function to_detail(id) {
   router.push({
@@ -48,4 +56,31 @@ function to_detail(id) {
     params: { id }
   })
 }
+
+function changeModify() {
+  isModify.value = !isModify.value;
+  infoTmp.value = { ...info.value };
+}
+
+function ModifyInfo() {
+  axios.post('/updateUser', {
+    uid: store.uid,
+    ...infoTmp.value
+  }, {
+    headers: { 'Content-Type': 'application/json' }
+  }).then(response => {
+    info.value = infoTmp.value;
+    changeModify();
+  });
+}
+
+axios('/loadUser/' + store.uid).then(response => {
+  votes.value = info.value.votes;
+
+  delete info.value.votes;
+  info.value = response.data;
+  infoTmp.value = { ...info.value };
+});
+
+
 </script>
